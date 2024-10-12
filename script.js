@@ -1,54 +1,26 @@
-// Funktion för att visa sektioner baserat på hash
 function showSection() {
     const hash = window.location.hash;
     const sections = document.querySelectorAll('.tool-section');
-
     sections.forEach(section => {
         section.style.display = 'none';
         section.style.opacity = 0;
     });
-
     if (hash) {
         const currentSection = document.querySelector(hash);
         currentSection.style.display = 'block';
         setTimeout(() => currentSection.style.opacity = 1, 100); // Delay for fade-in
-
-        // Ladda och visa sparade data för stegräknare och kaloriräknare
-        if (hash === '#stegraknare') {
-            loadSteps(); // Ladda sparade steg
-        } else if (hash === '#kaloriraknare') {
-            loadCalories(); // Ladda sparade kalorier
-        }
     }
 }
 
-// Funktion för att ladda sparade steg och visa dem
-function loadSteps() {
-    const stepsResult = document.getElementById("stepsResult");
-    const steps = localStorage.getItem('steps');
+window.addEventListener('load', () => {
+    showSection();
+    checkCookieConsent();
+    loadSteps();
+    loadCalories();
+});
 
-    // Visa tidigare registrerade steg och meddelande
-    if (steps) {
-        stepsResult.innerHTML = `Tidigare registrerade steg: ${steps}.`;
-    } else {
-        stepsResult.innerHTML = "Inga tidigare steg registrerade.";
-    }
-}
+window.addEventListener('hashchange', showSection);
 
-// Funktion för att ladda sparade kalorier och visa dem
-function loadCalories() {
-    const caloriesResult = document.getElementById("caloriesResult");
-    const calories = localStorage.getItem('calories');
-
-    // Visa tidigare registrerade kalorier och meddelande
-    if (calories) {
-        caloriesResult.innerHTML = `Tidigare registrerade kalorier: ${calories}.`;
-    } else {
-        caloriesResult.innerHTML = "Inga tidigare kalorier registrerade.";
-    }
-}
-
-// Funktion för att beräkna BMI
 function calculateBMI() {
     const height = document.getElementById("height").value / 100;
     const weight = document.getElementById("weight").value;
@@ -68,51 +40,96 @@ function calculateBMI() {
     }
 
     bmiResult.innerHTML = message;
-    localStorage.setItem('bmi', bmi);
 }
 
-// Funktion för att spåra steg och spara dem
 function trackSteps() {
-    const steps = document.getElementById("steps").value;
-    const stepsResult = document.getElementById("stepsResult");
+    const stepsInput = document.getElementById("steps");
+    const steps = parseInt(stepsInput.value);
+    const stepsList = document.getElementById("stepsList");
 
-    if (steps) {
-        let message = steps < 10000 
-            ? "Försök att öka din dagliga aktivitet."
-            : "Bra jobbat, du har nått ditt steg-mål för dagen!";
-        
-        stepsResult.innerHTML = message;
-
-        // Spara stegen i localStorage och visa direkt
-        localStorage.setItem('steps', steps);
-        loadSteps(); // Ladda om för att visa aktuella steg
-    } else {
-        stepsResult.innerHTML = "Ange ett antal steg.";
+    if (!steps) {
+        alert("Vänligen ange antalet steg.");
+        return;
     }
+
+    // Save steps to cookies
+    let stepsData = getCookie("stepsData") ? JSON.parse(getCookie("stepsData")) : [];
+    stepsData.push({ date: new Date().toLocaleDateString(), steps });
+    setCookie("stepsData", JSON.stringify(stepsData), 30); // Save for 30 days
+
+    // Clear input
+    stepsInput.value = "";
+
+    // Update the displayed list
+    displaySteps(stepsData);
 }
 
-// Funktion för att spåra kalorier och spara dem
 function trackCalories() {
-    const calories = document.getElementById("calories").value;
-    const caloriesResult = document.getElementById("caloriesResult");
+    const caloriesInput = document.getElementById("calories");
+    const calories = parseInt(caloriesInput.value);
+    const caloriesList = document.getElementById("caloriesList");
 
-    if (calories) {
-        caloriesResult.innerHTML = `Du har ätit ${calories} kalorier idag.`;
-        
-        // Spara kalorier i localStorage och visa direkt
-        localStorage.setItem('calories', calories);
-        loadCalories(); // Ladda om för att visa aktuella kalorier
-    } else {
-        caloriesResult.innerHTML = "Ange ett kaloriantal.";
+    if (!calories) {
+        alert("Vänligen ange kalorier.");
+        return;
+    }
+
+    // Save calories to cookies
+    let caloriesData = getCookie("caloriesData") ? JSON.parse(getCookie("caloriesData")) : [];
+    caloriesData.push({ date: new Date().toLocaleDateString(), calories });
+    setCookie("caloriesData", JSON.stringify(caloriesData), 30); // Save for 30 days
+
+    // Clear input
+    caloriesInput.value = "";
+
+    // Update the displayed list
+    displayCalories(caloriesData);
+}
+
+function displaySteps(stepsData) {
+    const stepsList = document.getElementById("stepsList");
+    stepsList.innerHTML = ""; // Clear existing list
+
+    stepsData.forEach(entry => {
+        const feedback = entry.steps < 10000 ? "Försök att öka din dagliga aktivitet." : "Bra jobbat, du har nått ditt steg-mål för dagen!";
+        stepsList.innerHTML += `<p>${entry.date}: ${entry.steps} steg. ${feedback}</p>`;
+    });
+}
+
+function displayCalories(caloriesData) {
+    const caloriesList = document.getElementById("caloriesList");
+    caloriesList.innerHTML = ""; // Clear existing list
+
+    caloriesData.forEach(entry => {
+        caloriesList.innerHTML += `<p>${entry.date}: ${entry.calories} kalorier.</p>`;
+    });
+}
+
+function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+}
+
+function getCookie(name) {
+    return document.cookie.split('; ').reduce((prev, current) => {
+        const [key, value] = current.split('=');
+        return key === name ? decodeURIComponent(value) : prev;
+    }, '');
+}
+
+function checkCookieConsent() {
+    const cookiePopup = document.getElementById("cookiePopup");
+    if (!getCookie("cookiesAccepted")) {
+        cookiePopup.classList.remove("hidden");
     }
 }
 
-// Funktion för att toggla credits-popup
-function toggleCredits() {
-    const popup = document.getElementById('creditsPopup');
-    popup.classList.toggle('hidden'); // Toggle visibility of the popup
+function acceptCookies() {
+    setCookie("cookiesAccepted", "true", 30);
+    document.getElementById("cookiePopup").classList.add("hidden");
 }
 
-// Initiera sektionerna när sidan laddas
-window.addEventListener('load', showSection);
-window.addEventListener('hashchange', showSection);
+function toggleCredits() {
+    const creditsPopup = document.getElementById("creditsPopup");
+    creditsPopup.classList.toggle("hidden");
+}
