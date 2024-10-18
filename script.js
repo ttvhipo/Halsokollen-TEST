@@ -7,8 +7,10 @@ function showSection() {
     });
     if (hash) {
         const currentSection = document.querySelector(hash);
-        currentSection.style.display = 'block';
-        setTimeout(() => currentSection.style.opacity = 1, 100); // Delay for fade-in
+        if (currentSection) {
+            currentSection.style.display = 'block';
+            setTimeout(() => currentSection.style.opacity = 1, 100); // Delay for fade-in
+        }
     }
 }
 
@@ -52,15 +54,11 @@ function trackSteps() {
         return;
     }
 
-    // Save steps to cookies
     let stepsData = getCookie("stepsData") ? JSON.parse(getCookie("stepsData")) : [];
     stepsData.push({ date: new Date().toLocaleDateString(), steps });
-    setCookie("stepsData", JSON.stringify(stepsData), 30); // Save for 30 days
+    setCookie("stepsData", JSON.stringify(stepsData), 30);
 
-    // Clear input
     stepsInput.value = "";
-
-    // Update the displayed list
     displaySteps(stepsData);
 }
 
@@ -74,21 +72,17 @@ function trackCalories() {
         return;
     }
 
-    // Save calories to cookies
     let caloriesData = getCookie("caloriesData") ? JSON.parse(getCookie("caloriesData")) : [];
     caloriesData.push({ date: new Date().toLocaleDateString(), calories });
-    setCookie("caloriesData", JSON.stringify(caloriesData), 30); // Save for 30 days
+    setCookie("caloriesData", JSON.stringify(caloriesData), 30);
 
-    // Clear input
     caloriesInput.value = "";
-
-    // Update the displayed list
     displayCalories(caloriesData);
 }
 
 function displaySteps(stepsData) {
     const stepsList = document.getElementById("stepsList");
-    stepsList.innerHTML = ""; // Clear existing list
+    stepsList.innerHTML = "";
 
     stepsData.forEach(entry => {
         const feedback = entry.steps < 10000 ? "Försök att öka din dagliga aktivitet." : "Bra jobbat, du har nått ditt steg-mål för dagen!";
@@ -98,7 +92,7 @@ function displaySteps(stepsData) {
 
 function displayCalories(caloriesData) {
     const caloriesList = document.getElementById("caloriesList");
-    caloriesList.innerHTML = ""; // Clear existing list
+    caloriesList.innerHTML = "";
 
     caloriesData.forEach(entry => {
         caloriesList.innerHTML += `<p>${entry.date}: ${entry.calories} kalorier.</p>`;
