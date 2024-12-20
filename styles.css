@@ -165,3 +165,23 @@ footer {
     right: 10px;
     cursor: pointer;
 }
+/* Responsive iframe container */
+.responsive-iframe-container {
+    position: relative;
+    width: 100%;
+    padding-top: 62.5%; /* Aspect ratio (453/725 * 100) */
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Responsive iframe */
+.responsive-iframe-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
