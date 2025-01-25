@@ -125,7 +125,7 @@ button:hover {
 
 /* Default logo size */
 .logo {
-    width: auto; /* Adjust as needed */
+    width: 60px; /* Adjust as needed */
     height: auto; /* Maintain aspect ratio */
     position: absolute;
     top: 10px;
