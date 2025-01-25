@@ -134,10 +134,10 @@ button:hover {
     animation: fadeIn 1s ease;
 }
 
-/* Adjust logo size for mobile devices */
+/* Hide the logo on mobile devices */
 @media (max-width: 768px) {
     .logo {
-        width: 100px; /* Smaller size for mobile */
+        display: none; /* Hide the logo */
     }
 }
 
