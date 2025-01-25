@@ -34,6 +34,22 @@ section {
     margin-bottom: 50px;
 }
 
+/* Neon Orange Text Style */
+.neon-text {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: transparent;
+    background-clip: text;
+    background-image: linear-gradient(to right, #ff6600, #ff9900); /* Orange gradient */
+    text-shadow: 0 0 5px #ff6600, 0 0 10px #ff6600, 0 0 20px #ff6600; /* Neon glow in orange */
+}
+
+/* Hover effect to remove glow */
+.neon-text:hover {
+    text-shadow: none;
+}
+
 h2 {
     color: #ff851b;
     font-size: 1.8em;
@@ -85,18 +101,18 @@ button {
     padding: 12px 20px;
     border: none;
     border-radius: 4px;
-    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-top: 10px;
 }
 
 button:hover {
-    background-color: #ff751b;
+    background-color: #e67518;
 }
 
 .result {
-    margin-top: 20px;
-    font-size: 1.2em;
+    margin-top: 15px;
+    font-weight: bold;
 }
 
 .alert {
@@ -104,84 +120,230 @@ button:hover {
 }
 
 .normal {
-    color: green;
+    color: #ff851b;
+}
+
+/* Default logo size */
+.logo {
+    width: 150px; /* Adjust as needed */
+    height: auto; /* Maintain aspect ratio */
+    transition: width 0.3s ease; /* Smooth transition */
+}
+
+/* Adjust logo size for mobile devices */
+@media (max-width: 768px) {
+    .logo {
+        width: 100px; /* Smaller size for mobile */
+    }
 }
 
 footer {
-    text-align: center;
-    padding: 20px;
     background-color: #ff851b;
     color: white;
+    text-align: center;
+    padding: 20px;
     font-size: 0.9em;
+    margin-top: 30px;
 }
 
-.about-btn {
+footer span {
+    color: #FFC0CB; /* Rosa hjärta */
+}
+
+/* Popup styles */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
     background-color: white;
-    color: #ff851b;
-    border: 1px solid #ff851b;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+    max-width: 400px;
+    position: relative;
+    max-height: 80vh; /* Limit height to 80% of the viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
-/* Cookie Popup Styling */
-.cookie-popup.hidden {
+/* Close button styles */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+/* Adjust popup content for mobile devices */
+@media (max-width: 768px) {
+    .popup-content {
+        width: 90%; /* Take up more screen width on mobile */
+        max-width: none; /* Remove max-width restriction */
+        padding: 15px; /* Slightly reduce padding */
+    }
+
+    .close {
+        top: 5px;
+        right: 10px;
+        font-size: 20px; /* Slightly smaller close button */
+    }
+}
+
+.hidden {
     display: none;
 }
 
 .cookie-popup {
     position: fixed;
-    bottom: 10px;
-    left: 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 15px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-}
-
-.popup.hidden {
-    display: none;
-}
-
-.popup {
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 20px;
+    left: 20px;
     width: 300px;
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-    text-align: center;
-}
-
-.popup-content {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
     padding: 20px;
 }
 
-.close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
+.cookie-popup-content {
+    display: flex;
+    flex-direction: column;
 }
-/* Responsive iframe container */
-.responsive-iframe-container {
-    position: relative;
-    width: 100%;
-    padding-top: 62.5%; /* Aspect ratio (453/725 * 100) */
-    overflow: hidden;
-    border: 1px solid #ddd;
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Adjustments for larger screens */
+@media (min-width: 768px) {
+    .container {
+        padding: 40px;
+    }
+}
+
+/* Adjustments for mobile devices */
+@media (max-width: 768px) {
+    button {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    .tools {
+        flex-direction: column;
+    }
+    
+    .tools a {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    
+    .container {
+        padding: 20px;
+    }
+}
+
+/* Hälso Coach Chat Styles */
+#halsocoach .chat-container {
+    background-color: #fff;
     border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-/* Responsive iframe */
-.responsive-iframe-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
+#halsocoach .chat-window {
+    background-color: #f0f4f7;
+    padding: 16px;
+    height: 400px;
+    overflow-y: auto;
+}
+
+#halsocoach .input-box {
+    background-color: #fff;
+    padding: 16px;
+    border-top: 1px solid #e0e0e0;
+}
+
+#halsocoach #halsocoach-input {
     width: 100%;
-    height: 100%;
-    border: none;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
+#halsocoach .message-user {
+    background-color: #ff851b;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: inline-block;
+    max-width: 80%;
+    margin-bottom: 8px;
+}
+
+#halsocoach .message-ai {
+    background-color: #e0f4e0;
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: inline-block;
+    max-width: 80%;
+    margin-bottom: 8px;
+}
+
+/* Code block styling */
+.code-block {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0;
+    font-family: "Courier New", monospace;
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.code-block pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.copy-button:hover {
+    background-color: #2563eb;
+}
+
+.copy-button:active {
+    background-color: #1e40af;
+}
