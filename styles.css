@@ -128,6 +128,7 @@ button:hover {
     width: 150px; /* Adjust as needed */
     height: auto; /* Maintain aspect ratio */
     transition: width 0.3s ease; /* Smooth transition */
+    animation: fadeIn 1s ease;
 }
 
 /* Adjust logo size for mobile devices */
