@@ -43,6 +43,7 @@ p {
     line-height: 1.6;
 }
 
+/* Tools Section - Updated for Mobile */
 .tools {
     display: flex;
     justify-content: center;
@@ -63,6 +64,21 @@ p {
 .tools a:hover {
     background-color: #d0e8d0;
     transform: scale(1.05);
+}
+
+/* Mobile View - Stack Tools Vertically */
+@media (max-width: 768px) {
+    .tools {
+        flex-direction: column; /* Stack tools vertically */
+        align-items: center; /* Center-align tools */
+        gap: 10px; /* Reduce gap between stacked items */
+    }
+
+    .tools a {
+        width: 100%; /* Full width for stacked items */
+        text-align: center; /* Center text */
+        padding: 12px; /* Slightly larger padding for better touch targets */
+    }
 }
 
 .tool-section {
