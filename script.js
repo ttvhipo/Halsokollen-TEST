@@ -208,7 +208,7 @@ async function sendHalsoCoachMessage(message) {
         body: JSON.stringify({
             model: "deepseek-chat",
             messages: [
-                { role: "system", content: "Du är en hjälpsam hälsocoach. Ditt namn är Hälso Coach. Ge hälsorelaterade råd och vägledning på svenska." },
+                { role: "system", content: "Du är en hjälpsam hälsocoach. Ditt namn är Hälso Coach. Ge hälsorelaterade råd och vägledning på svenska. Du beffiner dig på hemsidan Hälsokollen.xyz. Hemsidan är gjord av Shant Ramzi. Hemsidan är en projekt för skolan. I hemsidan finns BMI kalkylator, Stegräknare och Kaloriräknare. Det finns också en informertial om hemsidan." },
                 ...halsCoachChatHistory,
             ],
             stream: false
