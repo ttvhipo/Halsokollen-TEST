@@ -43,7 +43,7 @@ p {
     line-height: 1.6;
 }
 
-/* Tools Section - Updated for Mobile */
+/* Tools Section - Matches Real Site */
 .tools {
     display: flex;
     justify-content: center;
@@ -54,11 +54,14 @@ p {
 .tools a {
     text-decoration: none;
     color: #ff851b;
-    padding: 10px 15px;
+    padding: 10px 15px; /* Match real site padding */
     border-radius: 4px;
     background-color: #e0f4e0;
     font-weight: bold;
     transition: background-color 0.3s, transform 0.3s;
+    text-align: left; /* Align text to the left */
+    width: 100%; /* Full width for mobile */
+    display: block; /* Ensure full width and proper alignment */
 }
 
 .tools a:hover {
@@ -70,14 +73,15 @@ p {
 @media (max-width: 768px) {
     .tools {
         flex-direction: column; /* Stack tools vertically */
-        align-items: center; /* Center-align tools */
+        align-items: center; /* Center-align tools container */
         gap: 10px; /* Reduce gap between stacked items */
     }
 
     .tools a {
-        width: 100%; /* Full width for stacked items */
-        text-align: center; /* Center text */
-        padding: 12px; /* Slightly larger padding for better touch targets */
+        width: 90%; /* Slightly less than full width for better centering */
+        max-width: 300px; /* Limit maximum width for better readability */
+        padding: 10px 15px; /* Match real site padding */
+        text-align: left; /* Align text to the left */
     }
 }
 
