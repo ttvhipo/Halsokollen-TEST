@@ -216,11 +216,18 @@ async function sendHalsoCoachMessage(message) {
             })
         });
 
+        // Handle API errors (e.g., 402 Payment Required)
         if (!response.ok) {
-            throw new Error("API is under maintenance");
+            throw new Error(`API Error: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.json();
+
+        // Handle cases where the API response is invalid or incomplete
+        if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+            throw new Error("Invalid API response");
+        }
+
         const aiResponse = data.choices[0].message.content;
 
         halsCoachChatHistory.push({ role: "assistant", content: aiResponse });
@@ -228,14 +235,11 @@ async function sendHalsoCoachMessage(message) {
 
         displayHalsoCoachChat();
     } catch (error) {
-        halsCoachChatDiv.innerHTML += `
-            <div class="text-left">
-                <span class="message-ai">
-                    <strong>Hälso Coach:</strong> API is currently under maintenance. Please try again later.
-                </span>
-            </div>
-        `;
-        halsCoachChatDiv.scrollTop = halsCoachChatDiv.scrollHeight;
+        // Display maintenance message if the API fails
+        halsCoachChatHistory.push({ role: "assistant", content: "API is currently under maintenance. Please try again later." });
+        localStorage.setItem("halsCoachChatHistory", JSON.stringify(halsCoachChatHistory));
+
+        displayHalsoCoachChat();
     } finally {
         hideLoadingSpinner(); // Hide loading spinner
     }
