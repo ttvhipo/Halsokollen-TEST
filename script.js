@@ -199,30 +199,46 @@ async function sendHalsoCoachMessage(message) {
     halsCoachChatHistory.push({ role: "user", content: message });
     displayHalsoCoachChat();
 
-    const response = await fetch(HALS_COACH_API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${HALS_COACH_API_KEY}`
-        },
-        body: JSON.stringify({
-            model: "deepseek-chat",
-            messages: [
-                { role: "system", content: "Du är en hjälpsam hälsocoach. Ditt namn är Hälso Coach. Ge hälsorelaterade råd och vägledning på svenska. Du beffiner dig på hemsidan Hälsokollen.xyz. Hemsidan är gjord av Shant Ramzi. Hemsidan är en projekt för skolan. I hemsidan finns BMI kalkylator, Stegräknare och Kaloriräknare. Det finns också en informertial om hemsidan." },
-                ...halsCoachChatHistory,
-            ],
-            stream: false
-        })
-    });
+    try {
+        const response = await fetch(HALS_COACH_API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${HALS_COACH_API_KEY}`
+            },
+            body: JSON.stringify({
+                model: "deepseek-chat",
+                messages: [
+                    { role: "system", content: "Du är en hjälpsam hälsocoach. Ditt namn är Hälso Coach. Ge hälsorelaterade råd och vägledning på svenska. Du beffiner dig på hemsidan Hälsokollen.xyz. Hemsidan är gjord av Shant Ramzi. Hemsidan är en projekt för skolan. I hemsidan finns BMI kalkylator, Stegräknare och Kaloriräknare. Det finns också en informertial om hemsidan." },
+                    ...halsCoachChatHistory,
+                ],
+                stream: false
+            })
+        });
 
-    const data = await response.json();
-    const aiResponse = data.choices[0].message.content;
+        if (!response.ok) {
+            throw new Error("API is under maintenance");
+        }
 
-    halsCoachChatHistory.push({ role: "assistant", content: aiResponse });
-    localStorage.setItem("halsCoachChatHistory", JSON.stringify(halsCoachChatHistory));
+        const data = await response.json();
+        const aiResponse = data.choices[0].message.content;
 
-    displayHalsoCoachChat();
-    hideLoadingSpinner(); // Hide loading spinner
+        halsCoachChatHistory.push({ role: "assistant", content: aiResponse });
+        localStorage.setItem("halsCoachChatHistory", JSON.stringify(halsCoachChatHistory));
+
+        displayHalsoCoachChat();
+    } catch (error) {
+        halsCoachChatDiv.innerHTML += `
+            <div class="text-left">
+                <span class="message-ai">
+                    <strong>Hälso Coach:</strong> API is currently under maintenance. Please try again later.
+                </span>
+            </div>
+        `;
+        halsCoachChatDiv.scrollTop = halsCoachChatDiv.scrollHeight;
+    } finally {
+        hideLoadingSpinner(); // Hide loading spinner
+    }
 }
 
 // Handle Enter key press
